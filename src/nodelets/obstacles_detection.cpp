@@ -312,7 +312,7 @@ private:
 		}
 
 		//Common variables for all strategies
-		pcl::IndicesPtr ground, obstacles;
+		pcl::IndicesPtr ground, obstacles, underground;
 		pcl::PointCloud<pcl::PointXYZ>::Ptr obstaclesCloud(new pcl::PointCloud<pcl::PointXYZ>);
 		pcl::PointCloud<pcl::PointXYZ>::Ptr groundCloud(new pcl::PointCloud<pcl::PointXYZ>);
 		pcl::PointCloud<pcl::PointXYZ>::Ptr obstaclesCloudWithoutFlatSurfaces(new pcl::PointCloud<pcl::PointXYZ>);
@@ -329,6 +329,7 @@ private:
 					cv::Point3f(localTransform.x(), localTransform.y(), localTransform.z()),
 					ground,
 					obstacles,
+					underground,
 					&flatObstacles);
 
 			if(cloud->size() && ((ground.get() && ground->size()) || (obstacles.get() && obstacles->size())))

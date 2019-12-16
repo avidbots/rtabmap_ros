@@ -12,6 +12,12 @@ if (POLICY CMP0042)
     cmake_policy(SET CMP0042 OLD)
 endif (POLICY CMP0042)
 
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -march=core2 -mtune=sandybridge")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -O2 -march=core2 -mtune=sandybridge -ggdb")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb")
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -41,7 +47,7 @@ add_definitions(${PCL_DEFINITIONS}) # To include -march=native if set
 #Qt stuff
 # If librtabmap_gui.so is found, rtabmapviz will be built
 # If rviz is found, plugins will be built
-IF(RTABMAP_GUI OR rviz_FOUND)
+IF(RTABMAP_GUI)
    IF(RTABMAP_QT_VERSION EQUAL 4)
       FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui REQUIRED)
       INCLUDE(${QT_USE_FILE})
@@ -57,7 +63,7 @@ IF(RTABMAP_GUI OR rviz_FOUND)
          ENDIF(NOT Qt5_FOUND)
       ENDIF()
    ENDIF()   
-ENDIF(RTABMAP_GUI OR rviz_FOUND)
+ENDIF(RTABMAP_GUI)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -412,9 +418,9 @@ ENDIF(rviz_FOUND)
 # If costmap_2d is found, add the plugins
 IF(costmap_2d_FOUND)
     MESSAGE(STATUS "WITH costmap_2d")
-    IF(${costmap_2d_VERSION_MAJOR} GREATER 1 OR ${costmap_2d_VERSION_MINOR} GREATER 15)
-      ADD_DEFINITIONS("-DCOSTMAP_2D_POINTCLOUD2")
-    ENDIF(${costmap_2d_VERSION_MAJOR} GREATER 1 OR ${costmap_2d_VERSION_MINOR} GREATER 15)
+    # IF(${costmap_2d_VERSION_MAJOR} GREATER 1 OR ${costmap_2d_VERSION_MINOR} GREATER 15)
+    #   ADD_DEFINITIONS("-DCOSTMAP_2D_POINTCLOUD2")
+    # ENDIF(${costmap_2d_VERSION_MAJOR} GREATER 1 OR ${costmap_2d_VERSION_MINOR} GREATER 15)
     include_directories(${costmap_2d_INCLUDE_DIRS})
     add_library(rtabmap_costmap_plugins
        src/costmap_2d/static_layer.cpp

@@ -851,7 +851,7 @@ rtabmap::Signature nodeDataFromROS(const rtabmap_ros::NodeData & msg)
 		{
 			words3D.insert(std::make_pair(wordId, cv::Point3f(cloud[i].x, cloud[i].y, cloud[i].z)));
 		}
-		if(i < descriptors.rows)
+		if(descriptors.rows >= 0 && i < static_cast<unsigned int>(descriptors.rows))
 		{
 			wordsDescriptors.insert(std::make_pair(wordId, descriptors.row(i).clone()));
 		}
@@ -889,9 +889,9 @@ rtabmap::Signature nodeDataFromROS(const rtabmap_ros::NodeData & msg)
 	{
 		// multi-cameras model
 		if(msg.fx.size() &&
-		   msg.fx.size() == msg.fy.size(),
-		   msg.fx.size() == msg.cx.size(),
-		   msg.fx.size() == msg.cy.size(),
+		   msg.fx.size() == msg.fy.size() &&
+		   msg.fx.size() == msg.cx.size() &&
+		   msg.fx.size() == msg.cy.size() &&
 		   msg.fx.size() == msg.localTransform.size())
 		{
 			for(unsigned int i=0; i<msg.fx.size(); ++i)
@@ -1271,7 +1271,7 @@ cv::Mat userDataFromROS(const rtabmap_ros::UserData & dataMsg)
 		}
 		else
 		{
-			if(dataMsg.cols != (int)dataMsg.data.size() || dataMsg.rows != 1 || dataMsg.type != CV_8UC1)
+			if(dataMsg.cols != dataMsg.data.size() || dataMsg.rows != 1u || dataMsg.type != CV_8UC1)
 			{
 				ROS_ERROR("cols, rows and type fields of the UserData msg "
 						"are not correctly set (cols=%d, rows=%d, type=%d)! We assume that the data "
@@ -1529,6 +1529,10 @@ bool convertRGBDMsgs(
 		if(localTransform.isNull())
 		{
 			ROS_ERROR("TF of received image %d at time %fs is not set!", i, stamp.toSec());
+			ROS_ERROR("Known TF at time %fs:\n%s", stamp.toSec(),
+				  listener.allFramesAsDot(stamp.toSec()).c_str());
+			ROS_ERROR("Last known TF:\n%s",
+				  listener.allFramesAsString().c_str());
 			return false;
 		}
 		// sync with odometry stamp

@@ -1,6 +1,6 @@
 /*********************************************************************
  *
- * Software License Agreement (BSD License)
+1;95;0c * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2008, 2013, Willow Garage, Inc.
  *  All rights reserved.
@@ -36,6 +36,7 @@
  *         David V. Lu!!
  *********************************************************************/
 #include "voxel_layer.h"
+#include <string>
 #include <pluginlib/class_list_macros.h>
 #include <sensor_msgs/point_cloud2_iterator.h>
 #include <boost/thread.hpp>
@@ -53,6 +54,7 @@ using costmap_2d::ObservationBuffer;
 using costmap_2d::Observation;
 using costmap_2d::VoxelGrid;
 
+using namespace std::string_literals;
 
 namespace rtabmap_ros
 {
@@ -159,14 +161,15 @@ void VoxelLayer::updateBounds(double robot_x, double robot_y, double robot_yaw, 
     const Observation& obs = *it;
 
 #ifdef COSTMAP_2D_POINTCLOUD2
-    const sensor_msgs::PointCloud2& cloud = *(obs.cloud_);
+    sensor_msgs::PointCloud2 cloud;
+    pcl::toROSMsg(*obs.cloud_, cloud);
     // Note that these points are already filtered with max and min obstacle heights
     // You will have to adjust param file to see points beyond default settings
-    sensor_msgs::PointCloud2ConstIterator<float> iter_x(cloud, "x");
-    sensor_msgs::PointCloud2ConstIterator<float> iter_y(cloud, "y");
-    sensor_msgs::PointCloud2ConstIterator<float> iter_z(cloud, "z");
+    sensor_msgs::PointCloud2ConstIterator<float> iter_x(cloud, "x"s);
+    sensor_msgs::PointCloud2ConstIterator<float> iter_y(cloud, "y"s);
+    sensor_msgs::PointCloud2ConstIterator<float> iter_z(cloud, "z"s);
 
-    for (unsigned int i = 0; iter_x != iter_x.end(); ++iter_x, ++iter_y, ++iter_z) {
+    for (; iter_x != iter_x.end(); ++iter_x, ++iter_y, ++iter_z) {
         const double x = *iter_x;
         const double y = *iter_y;
         const double z = *iter_z;
@@ -303,9 +306,11 @@ void VoxelLayer::raytraceFreespace(const Observation& clearing_observation, doub
   double map_end_z = origin_z_ + size_z_ * z_resolution_;
 
 #ifdef COSTMAP_2D_POINTCLOUD2
-    sensor_msgs::PointCloud2ConstIterator<float> iter_x(*(clearing_observation.cloud_), "x");
-    sensor_msgs::PointCloud2ConstIterator<float> iter_y(*(clearing_observation.cloud_), "y");
-    sensor_msgs::PointCloud2ConstIterator<float> iter_z(*(clearing_observation.cloud_), "z");
+    sensor_msgs::PointCloud2 cloud;
+    pcl::toROSMsg(*clearing_observation.cloud_, cloud);
+    sensor_msgs::PointCloud2ConstIterator<float> iter_x(cloud, "x");
+    sensor_msgs::PointCloud2ConstIterator<float> iter_y(cloud, "y");
+    sensor_msgs::PointCloud2ConstIterator<float> iter_z(cloud, "z");
 
     for (;iter_x != iter_x.end(); ++iter_x, ++iter_y, ++iter_z)
     {
@@ -392,7 +397,7 @@ void VoxelLayer::raytraceFreespace(const Observation& clearing_observation, doub
   {
     clearing_endpoints_.header.frame_id = global_frame_;
 #ifdef COSTMAP_2D_POINTCLOUD2
-    clearing_endpoints_.header.stamp = clearing_observation.cloud_->header.stamp;
+    clearing_endpoints_.header.stamp = pcl_conversions::fromPCL(clearing_observation.cloud_->header.stamp);
 #else
     clearing_endpoints_.header.stamp = pcl_conversions::fromPCL(clearing_observation.cloud_->header.stamp);
 #endif

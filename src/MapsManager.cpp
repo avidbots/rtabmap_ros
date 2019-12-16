@@ -559,7 +559,7 @@ std::map<int, rtabmap::Transform> MapsManager::updateMapCaches(
 
 					UDEBUG("Adding grid map %d to cache...", iter->first);
 					cv::Point3f viewPoint;
-					cv::Mat ground, obstacles, emptyCells;
+					cv::Mat ground, obstacles, underground, emptyCells;
 					if(iter->first > 0)
 					{
 						cv::Mat rgb, depth;
@@ -598,7 +598,7 @@ std::map<int, rtabmap::Transform> MapsManager::updateMapCaches(
 						{
 							Signature tmp(data);
 							tmp.setPose(iter->second);
-							occupancyGrid_->createLocalMap(tmp, ground, obstacles, emptyCells, viewPoint);
+							occupancyGrid_->createLocalMap(tmp, ground, obstacles, underground, emptyCells, viewPoint);
 							uInsert(gridMaps_, std::make_pair(iter->first, std::make_pair(std::make_pair(ground, obstacles), emptyCells)));
 							uInsert(gridMapsViewpoints_, std::make_pair(iter->first, viewPoint));
 						}
@@ -639,7 +639,7 @@ std::map<int, rtabmap::Transform> MapsManager::updateMapCaches(
 						{
 							Signature tmp(data);
 							tmp.setPose(iter->second);
-							occupancyGrid_->createLocalMap(tmp, ground, obstacles, emptyCells, viewPoint);
+							occupancyGrid_->createLocalMap(tmp, ground, obstacles, underground, emptyCells, viewPoint);
 							uInsert(gridMaps_,  std::make_pair(iter->first, std::make_pair(std::make_pair(ground, obstacles), emptyCells)));
 							uInsert(gridMapsViewpoints_, std::make_pair(iter->first, viewPoint));
 						}

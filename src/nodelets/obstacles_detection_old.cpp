@@ -142,7 +142,7 @@ private:
 		pcl::fromROSMsg(*cloudMsg, *originalCloud);
 
 		//Common variables for all strategies
-		pcl::IndicesPtr ground, obstacles;
+		pcl::IndicesPtr ground, obstacles, underground;
 		pcl::PointCloud<pcl::PointXYZ>::Ptr obstaclesCloud(new pcl::PointCloud<pcl::PointXYZ>);
 		pcl::PointCloud<pcl::PointXYZ>::Ptr groundCloud(new pcl::PointCloud<pcl::PointXYZ>);
 		pcl::PointCloud<pcl::PointXYZ>::Ptr obstaclesCloudWithoutFlatSurfaces(new pcl::PointCloud<pcl::PointXYZ>);
@@ -166,6 +166,7 @@ private:
 							originalCloud,
 							ground,
 							obstacles,
+							underground,
 							normalKSearch_,
 							groundNormalAngle_,
 							clusterRadius_,
@@ -232,6 +233,7 @@ private:
 							originalCloud_near,
 							ground,
 							obstacles,
+							underground,
 							normalKSearch_,
 							groundNormalAngle_,
 							clusterRadius_,
@@ -256,6 +258,7 @@ private:
 							originalCloud_far,
 							ground,
 							obstacles,
+							underground,
 							normalKSearch_,
 							2.*groundNormalAngle_,
 							3.*clusterRadius_,

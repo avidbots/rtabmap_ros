@@ -25,6 +25,38 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+/*
+_____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+Warnings   << rtabmap_ros:make /home/avidbots/Dev/avidbots-rtabmap/logs/rtabmap_ros/build.make.003.log                                                                                                                                       
+/home/avidbots/Dev/avidbots-rtabmap/src/rtabmap_ros/src/CoreWrapper.cpp: In member function 'void rtabmap_ros::CoreWrapper::process(const ros::Time&, rtabmap::SensorData&, const rtabmap::Transform&, const string&, const cv::Mat&, const rtabmap::OdometryInfo&)':
+/home/avidbots/Dev/avidbots-rtabmap/src/rtabmap_ros/src/CoreWrapper.cpp:1783:29: warning: 'static rtabmap::Transform rtabmap::Transform::getClosestTransform(const std::map<double, rtabmap::Transform>&, const double&, double*)' is deprecated: Use Transform::getTransform() instead to get always accurate transforms. [-Wdeprecated-declarations]
+    Transform t = Transform::getClosestTransform(imus_, data.stamp(), &stampDiff);
+                             ^~~~~~~~~~~~~~~~~~~
+In file included from /home/avidbots/Dev/avidbots-rtabmap/devel/lib/rtabmap-0.19/../../include/rtabmap-0.19/rtabmap/core/Parameters.h:32:0,
+                 from /home/avidbots/Dev/avidbots-rtabmap/src/rtabmap_ros/include/rtabmap_ros/CoreWrapper.h:48,
+                 from /home/avidbots/Dev/avidbots-rtabmap/src/rtabmap_ros/src/CoreWrapper.cpp:28:
+/home/avidbots/Dev/avidbots-rtabmap/devel/lib/rtabmap-0.19/../../include/rtabmap-0.19/rtabmap/core/Transform.h:156:38: note: declared here
+  RTABMAP_DEPRECATED(static Transform getClosestTransform(
+                                      ^
+/home/avidbots/Dev/avidbots-rtabmap/devel/lib/rtabmap-0.19/../../include/rtabmap-0.19/rtabmap/core/RtabmapExp.h:42:39: note: in definition of macro 'RTABMAP_DEPRECATED'
+ #define RTABMAP_DEPRECATED(func, msg) func __attribute__ ((deprecated(msg)))
+                                       ^~~~
+/home/avidbots/Dev/avidbots-rtabmap/src/rtabmap_ros/src/CoreWrapper.cpp:1783:80: warning: 'static rtabmap::Transform rtabmap::Transform::getClosestTransform(const std::map<double, rtabmap::Transform>&, const double&, double*)' is deprecated: Use Transform::getTransform() instead to get always accurate transforms. [-Wdeprecated-declarations]
+    Transform t = Transform::getClosestTransform(imus_, data.stamp(), &stampDiff);
+                                                                                ^
+In file included from /home/avidbots/Dev/avidbots-rtabmap/devel/lib/rtabmap-0.19/../../include/rtabmap-0.19/rtabmap/core/Parameters.h:32:0,
+                 from /home/avidbots/Dev/avidbots-rtabmap/src/rtabmap_ros/include/rtabmap_ros/CoreWrapper.h:48,
+                 from /home/avidbots/Dev/avidbots-rtabmap/src/rtabmap_ros/src/CoreWrapper.cpp:28:
+/home/avidbots/Dev/avidbots-rtabmap/devel/lib/rtabmap-0.19/../../include/rtabmap-0.19/rtabmap/core/Transform.h:156:38: note: declared here
+  RTABMAP_DEPRECATED(static Transform getClosestTransform(
+                                      ^
+/home/avidbots/Dev/avidbots-rtabmap/devel/lib/rtabmap-0.19/../../include/rtabmap-0.19/rtabmap/core/RtabmapExp.h:42:39: note: in definition of macro 'RTABMAP_DEPRECATED'
+ #define RTABMAP_DEPRECATED(func, msg) func __attribute__ ((deprecated(msg)))
+                                       ^~~~
+cd /home/avidbots/Dev/avidbots-rtabmap/build/rtabmap_ros; catkin build --get-env rtabmap_ros | catkin env -si  /usr/bin/make --jobserver-fds=6,7 -j; cd -
+.............................................................................................................................................................................................................................................
+*/
+
 #include "rtabmap_ros/CoreWrapper.h"
 
 #include <stdio.h>
